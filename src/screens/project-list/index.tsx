@@ -3,6 +3,7 @@ import { SearchPanel } from "./searchPanel";
 import { useEffect, useState } from "react";
 import { cleanObject, useMount, useDebounce } from "utils";
 import * as qs from "qs";
+import { useHttp } from "utils/http";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const ProjectListScreens = () => {
@@ -13,25 +14,27 @@ export const ProjectListScreens = () => {
     personId: "",
   });
   const debounceParam = useDebounce(param, 500);
-
+  const http = useHttp();
   //获取用户信息
   useMount(() => {
-    fetch(`${apiUrl}/users`).then(async (response) => {
-      if (response.ok) {
-        setUsers(await response.json());
-      }
-    });
+    http("users").then(setUsers);
+    // fetch(`${apiUrl}/users`).then(async (response) => {
+    //   if (response.ok) {
+    //     setUsers(await response.json());
+    //   }
+    // });
   });
 
   //获取列表
   useEffect(() => {
-    fetch(
-      `${apiUrl}/projects?${qs.stringify(cleanObject(debounceParam))}`
-    ).then(async (response) => {
-      if (response.ok) {
-        setList(await response.json());
-      }
-    });
+    http(`projects?${qs.stringify(cleanObject(debounceParam))}`).then(setList);
+    // fetch(
+    //   `${apiUrl}/projects?${qs.stringify(cleanObject(debounceParam))}`
+    // ).then(async (response) => {
+    //   if (response.ok) {
+    //     setList(await response.json());
+    //   }
+    // });
   }, [debounceParam]);
 
   return (
