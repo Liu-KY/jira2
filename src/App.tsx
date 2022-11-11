@@ -5,7 +5,6 @@ import "./App.css";
 
 function App() {
   const { user } = useAuth();
-  console.log(user);
   return (
     <div className="App">
       {/* <ProjectListScreens /> */}

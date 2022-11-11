@@ -1,11 +1,13 @@
+import { Table } from "antd";
 import { User } from "./searchPanel";
-
+import dayjs from "dayjs";
 interface Project {
   id: string;
   name: string;
   personId: string;
   pin: boolean;
   organization: string;
+  created: number;
 }
 
 interface ListProps {
@@ -15,23 +17,41 @@ interface ListProps {
 
 export const List = ({ list, users }: ListProps) => {
   return (
-    <table>
-      <thead>
-        <tr>
-          <td>项目名称</td>
-          <td>负责人</td>
-        </tr>
-      </thead>
-      <tbody>
-        {list.map((item) => (
-          <tr key={item.id}>
-            <td>{item.name}</td>
-            <td>
-              {users.find((user) => user.id === item.personId)?.name || "未知"}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <Table
+      pagination={false}
+      rowKey={"id"}
+      dataSource={list}
+      columns={[
+        {
+          title: "名称",
+          dataIndex: "name",
+          sorter: (a, b) => a.name.localeCompare(b.name),
+        },
+        {
+          title: "部门",
+          dataIndex: "organization",
+        },
+        {
+          title: "负责人",
+          dataIndex: "personId",
+          render(value) {
+            return (
+              <span>
+                {users.find((user) => user.id === value)?.name || "未知"}
+              </span>
+            );
+          },
+        },
+        {
+          title: "创建时间",
+          dataIndex: "created",
+          render(value) {
+            return (
+              <span>{value ? dayjs(value).format("YYYY-MM-DD") : "无"}</span>
+            );
+          },
+        },
+      ]}
+    />
   );
 };
