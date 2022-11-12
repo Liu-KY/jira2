@@ -3,6 +3,8 @@ import * as auth from "auth-provider";
 import { User } from "screens/project-list/searchPanel";
 import { useMount } from "utils";
 import { http } from "utils/http";
+import { useAsync } from "utils/useAsync";
+import { ErrorFullPafe, LoadingFullPafe } from "components/lib";
 
 const AuthContext = React.createContext<
   | {
@@ -26,16 +28,31 @@ const bootstrapUser = async () => {
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<null | User>(null);
+  const {
+    run,
+    error,
+    data: user,
+    isLoading,
+    isError,
+    setData: setUser,
+    isIdle,
+  } = useAsync<User | null>();
   const login = (AuthForm: auth.UserData) => auth.login(AuthForm).then(setUser);
   const register = (AuthForm: auth.UserData) =>
     auth.register(AuthForm).then(setUser);
   const logout = () => auth.logout().then(() => setUser(null));
 
-  useMount(async () => {
-    setUser(await bootstrapUser());
+  useMount(() => {
+    run(bootstrapUser());
   });
 
+  if (isLoading || isIdle) {
+    return <LoadingFullPafe />;
+  }
+
+  if (isError) {
+    return <ErrorFullPafe error={error} />;
+  }
   return (
     <AuthContext.Provider
       children={children}

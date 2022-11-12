@@ -4,6 +4,8 @@ import App from "./App";
 import { loadServer, DevTools } from "jira-dev-tool";
 import "antd/dist/antd.less";
 import { AppProviders } from "context";
+import { ErrorBoundary } from "components/error-boundary";
+import { ErrorFullPafe } from "components/lib";
 
 loadServer(() => {
   const root = ReactDOM.createRoot(
@@ -11,10 +13,12 @@ loadServer(() => {
   );
   root.render(
     <React.StrictMode>
-      <AppProviders>
-        <DevTools />
-        <App />
-      </AppProviders>
+      <ErrorBoundary fallbackRender={ErrorFullPafe}>
+        <AppProviders>
+          <DevTools />
+          <App />
+        </AppProviders>
+      </ErrorBoundary>
     </React.StrictMode>
   );
 });

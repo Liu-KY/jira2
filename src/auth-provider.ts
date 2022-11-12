@@ -29,7 +29,7 @@ export const login = (data: UserData) => {
     if (response.ok) {
       return handleUserResponse(await response.json());
     } else {
-      return Promise.reject(data);
+      return Promise.reject(await response.json());
     }
   });
 };
@@ -45,13 +45,11 @@ export const register = (data: UserData) => {
     if (response.ok) {
       return handleUserResponse(await response.json());
     } else {
-      return Promise.reject(data);
+      return Promise.reject(await response.json());
     }
   });
 };
 
 //退出
-export const logout = async () => {
+export const logout = async () =>
   window.localStorage.removeItem(localStorageKey);
-  window.location.reload();
-};
