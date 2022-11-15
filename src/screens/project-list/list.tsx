@@ -3,9 +3,9 @@ import { User } from "./searchPanel";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 export interface Project {
-  id: string;
+  id: number;
   name: string;
-  personId: string;
+  personId: number | undefined;
   pin: boolean;
   organization: string;
   created: number;
