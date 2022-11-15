@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu } from "antd";
+import { Button, Dropdown } from "antd";
 import type { MenuProps } from "antd";
 import { useAuth } from "context/auth-context";
 import { ProjectListScreens } from "screens/project-list";
@@ -6,10 +6,32 @@ import styled from "@emotion/styled";
 import { Row } from "components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { useState } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router";
+import { ProjectScreens } from "screens/project";
 
 export const AuthenticatedApp = () => {
-  const { logout, user } = useAuth();
+  return (
+    <Container>
+      <BrowserRouter>
+        <PageHeader />
+        <Main>
+          <Routes>
+            <Route path={"/projects"} element={<ProjectListScreens />} />
+            <Route
+              path={"/projects/:projectId/*"}
+              element={<ProjectScreens />}
+            />
+            <Route path={"*"} element={<Navigate to="/projects" />} />
+          </Routes>
+        </Main>
+      </BrowserRouter>
+    </Container>
+  );
+};
 
+const PageHeader = () => {
+  const { user, logout } = useAuth();
   const [items] = useState<MenuProps["items"]>([
     {
       key: "1",
@@ -20,28 +42,24 @@ export const AuthenticatedApp = () => {
       ),
     },
   ]);
-
+  const navigate = useNavigate();
   return (
-    <Container>
-      <Header between={true}>
-        <HeaderLeft gap={true}>
+    <Header between={true}>
+      <HeaderLeft gap={true}>
+        <Button type={"link"} onClick={() => navigate(`/`)}>
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
-          <h2>项目</h2>
-          <h2>用户</h2>
-        </HeaderLeft>
-        <HeaderRight>
-          <Dropdown menu={{ items }}>
-            <Button type={"link"} onClick={(e) => e.preventDefault()}>
-              Hi, {user?.name}
-            </Button>
-          </Dropdown>
-        </HeaderRight>
-      </Header>
-
-      <Main>
-        <ProjectListScreens />
-      </Main>
-    </Container>
+        </Button>
+        <h2>项目</h2>
+        <h2>用户</h2>
+      </HeaderLeft>
+      <HeaderRight>
+        <Dropdown menu={{ items }}>
+          <Button type={"link"} onClick={(e) => e.preventDefault()}>
+            Hi, {user?.name}
+          </Button>
+        </Dropdown>
+      </HeaderRight>
+    </Header>
   );
 };
 
