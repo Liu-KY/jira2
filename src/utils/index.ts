@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
@@ -31,4 +31,17 @@ export const useDebounce = <T>(value: T, time?: number) => {
   }, [value, time]);
 
   return debounceValue;
+};
+
+export const useDocumentTitle = (newTitle: string, keepOnUnmount = true) => {
+  const defaultTitle = useRef(document.title).current;
+  useEffect(() => {
+    document.title = newTitle;
+  }, [newTitle]);
+
+  useEffect(() => {
+    return () => {
+      if (!keepOnUnmount) document.title = defaultTitle;
+    };
+  }, []);
 };
