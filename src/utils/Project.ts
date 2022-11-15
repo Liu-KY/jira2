@@ -5,11 +5,11 @@ import { cleanObject } from "utils";
 import { useHttp } from "./http";
 import { useAsync } from "./useAsync";
 
-export const useProject = (params: Partial<Project>) => {
+export const useProject = (params?: Partial<Project>) => {
   const { run, ...remain } = useAsync<Project[]>();
   const http = useHttp();
   useEffect(() => {
-    run(http(`projects?${qs.stringify(cleanObject(params))}`));
+    run(http("projects", { data: cleanObject(params || {}) }));
   }, [params]);
   return remain;
 };
