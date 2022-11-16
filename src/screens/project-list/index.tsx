@@ -11,7 +11,12 @@ export const ProjectListScreens = () => {
   useDocumentTitle("项目列表", false);
 
   const [param, setParam] = useProjectsSearchParams();
-  const { data: list, isLoading, error } = useProject(useDebounce(param, 500));
+  const {
+    data: list,
+    isLoading,
+    error,
+    retry,
+  } = useProject(useDebounce(param, 500));
   const { data: users } = useUsers();
 
   return (
@@ -21,7 +26,12 @@ export const ProjectListScreens = () => {
       {error ? (
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
       ) : null}
-      <List dataSource={list || []} users={users || []} loading={isLoading} />
+      <List
+        dataSource={list || []}
+        users={users || []}
+        loading={isLoading}
+        retry={retry}
+      />
     </Container>
   );
 };

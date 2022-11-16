@@ -25,8 +25,9 @@ export const http = (
   if (config.method.toUpperCase() === "GET") {
     endpoint += `?${qs.stringify(data)}`;
   } else {
-    config.body = qs.stringify(data);
+    config.body = JSON.stringify(data);
   }
+  console.log(config);
   return window
     .fetch(`${apiUrl}/${endpoint}`, config)
     .then(async (response) => {
