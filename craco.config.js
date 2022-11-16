@@ -17,4 +17,11 @@ module.exports = {
       },
     },
   ],
+  devServer: {
+    hot: true,
+    client: {
+      // 只有error时，才产生覆盖层。
+      logging: "log",
+    },
+  },
 };

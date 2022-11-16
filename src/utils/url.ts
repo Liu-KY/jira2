@@ -9,7 +9,7 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
     useMemo(
       () =>
         subset(Object.fromEntries(serchParams), keys) as { [key in K]: string },
-      [serchParams]
+      [serchParams, keys]
     ),
     (params: Partial<{ [key in K]: unknown }>) => {
       const o = cleanObject({

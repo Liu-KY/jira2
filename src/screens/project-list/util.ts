@@ -1,7 +1,9 @@
 import { useUrlQueryParam } from "utils/url";
 import { useMemo } from "react";
 export const useProjectsSearchParams = () => {
-  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
+  const [param, setParam] = useUrlQueryParam(
+    useMemo(() => ["name", "personId"], [])
+  );
   return [
     useMemo(
       () => ({
