@@ -1,6 +1,5 @@
 /* @jsxImportSource @emotion/react */
-import { Form, Input, Select } from "antd";
-import { IdSelect } from "components/idSelect";
+import { Form, Input } from "antd";
 import { UserSelect } from "components/userSelect";
 import { Project } from "./list";
 
@@ -20,7 +19,6 @@ interface SearchPanelProps {
 }
 
 export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
-  console.log(param);
   return (
     <Form css={{ marginBottom: "2rem" }} layout={"inline"}>
       <Form.Item>

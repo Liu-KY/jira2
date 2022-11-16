@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 interface State<D> {
   error: null | Error;
@@ -24,41 +24,51 @@ export const useAsync = <D>(
     ...defaultInitialState,
     ...initialState,
   });
-  const config = {
-    ...defaultConfig,
-    ...initialConfig,
-  };
+
+  const config = useMemo(
+    () => ({
+      ...defaultConfig,
+      ...initialConfig,
+    }),
+    [initialConfig]
+  );
+
   const [retry, setRetry] = useState(() => () => {});
 
-  const setError = (error: Error) =>
-    setState({ error, data: null, stat: "error" });
+  const setError = useCallback(
+    (error: Error) => setState({ error, data: null, stat: "error" }),
+    []
+  );
 
-  const setData = (data: D) => setState({ data, stat: "success", error: null });
+  const setData = useCallback(
+    (data: D) => setState({ data, stat: "success", error: null }),
+    []
+  );
 
-  const run = (
-    promise: Promise<D>,
-    runConfig?: { retry: () => Promise<D> }
-  ) => {
-    if (!promise || !promise.then) throw new Error("请传入promise对象");
-    setState({ ...state, stat: "loading" });
+  const run = useCallback(
+    (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
+      if (!promise || !promise.then) throw new Error("请传入promise对象");
+      setState((prevState) => ({ ...prevState, stat: "loading" }));
 
-    setRetry(() => () => {
-      if (runConfig?.retry) {
-        run(runConfig.retry(), runConfig);
-      }
-    });
-
-    return promise
-      .then((data) => {
-        setData(data);
-        return data;
-      })
-      .catch((error) => {
-        setError(error);
-        if (config.throwOnError) return Promise.reject(error);
-        return error;
+      setRetry(() => () => {
+        if (runConfig?.retry) {
+          run(runConfig.retry(), runConfig);
+        }
       });
-  };
+
+      return promise
+        .then((data) => {
+          setData(data);
+          return data;
+        })
+        .catch((error) => {
+          setError(error);
+          if (config.throwOnError) return Promise.reject(error);
+          return error;
+        });
+    },
+    [setState, setError, setData, config]
+  );
 
   return {
     isError: state.stat === "error",

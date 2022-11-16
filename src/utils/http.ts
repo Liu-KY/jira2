@@ -1,6 +1,7 @@
 import * as auth from "auth-provider";
 import { useAuth } from "context/auth-context";
 import qs from "qs";
+import { useCallback } from "react";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -27,7 +28,7 @@ export const http = (
   } else {
     config.body = JSON.stringify(data);
   }
-  console.log(config);
+
   return window
     .fetch(`${apiUrl}/${endpoint}`, config)
     .then(async (response) => {
@@ -49,6 +50,9 @@ export const http = (
 
 export const useHttp = () => {
   const { user } = useAuth();
-  return (...[endpoint, config]: Parameters<typeof http>) =>
-    http(endpoint, { token: user?.token, ...config });
+  return useCallback(
+    (...[endpoint, config]: Parameters<typeof http>) =>
+      http(endpoint, { token: user?.token, ...config }),
+    [user]
+  );
 };
