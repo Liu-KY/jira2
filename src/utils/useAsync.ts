@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useReducer, useState } from "react";
+import { useMountedRef } from "utils";
 
 interface State<D> {
   error: null | Error;
@@ -16,15 +17,19 @@ const defaultConfig = {
   throwOnError: false,
 };
 
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+  const mountedRef = useMountedRef();
+  return useCallback(
+    (...args: T[]) => (mountedRef.current ? dispatch(...args) : void 0),
+    [dispatch, mountedRef]
+  );
+};
+
 export const useAsync = <D>(
   initialState?: State<D>,
   initialConfig?: typeof defaultConfig
 ) => {
-  const [state, setState] = useState<State<D>>({
-    ...defaultInitialState,
-    ...initialState,
-  });
-
+  //时候刷新
   const config = useMemo(
     () => ({
       ...defaultConfig,
@@ -32,23 +37,37 @@ export const useAsync = <D>(
     }),
     [initialConfig]
   );
-
+  //刷新
   const [retry, setRetry] = useState(() => () => {});
+  //状态数据
+  const [state, dispatch] = useReducer(
+    (state: State<D>, action: Partial<State<D>>) => ({
+      ...state,
+      ...action,
+    }),
+    {
+      ...defaultInitialState,
+      ...initialState,
+    }
+  );
+  //判断组件是否在更新
+  const safeDispatch = useSafeDispatch(dispatch);
 
   const setError = useCallback(
-    (error: Error) => setState({ error, data: null, stat: "error" }),
-    []
+    (error: Error) => safeDispatch({ error, data: null, stat: "error" }),
+    [safeDispatch]
   );
 
   const setData = useCallback(
-    (data: D) => setState({ data, stat: "success", error: null }),
-    []
+    (data: D) => safeDispatch({ data, stat: "success", error: null }),
+    [safeDispatch]
   );
 
   const run = useCallback(
     (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
       if (!promise || !promise.then) throw new Error("请传入promise对象");
-      setState((prevState) => ({ ...prevState, stat: "loading" }));
+
+      safeDispatch({ stat: "loading" });
 
       setRetry(() => () => {
         if (runConfig?.retry) {
@@ -67,7 +86,7 @@ export const useAsync = <D>(
           return error;
         });
     },
-    [setState, setError, setData, config]
+    [setError, setData, config, safeDispatch]
   );
 
   return {
@@ -82,4 +101,3 @@ export const useAsync = <D>(
     ...state,
   };
 };
-//     stat: "idle" | "loading" | "error" | "success";
