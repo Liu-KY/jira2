@@ -9,12 +9,17 @@ import { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Routes, Route, Navigate, useNavigate } from "react-router";
 import { ProjectScreens } from "screens/project";
+import { useAppDispatch } from "store";
+import { ProjectModal } from "screens/project-list/projectModal";
+import { ProjectPopover } from "components/projectPopover";
 
 export const AuthenticatedApp = () => {
+  const dispatch = useAppDispatch();
   return (
     <Container>
       <BrowserRouter>
         <PageHeader />
+
         <Main>
           <Routes>
             <Route path={"/projects"} element={<ProjectListScreens />} />
@@ -25,6 +30,7 @@ export const AuthenticatedApp = () => {
             <Route path={"*"} element={<Navigate to="/projects" />} />
           </Routes>
         </Main>
+        <ProjectModal />
       </BrowserRouter>
     </Container>
   );
@@ -42,6 +48,7 @@ const PageHeader = () => {
       ),
     },
   ]);
+
   const navigate = useNavigate();
   return (
     <Header between={true}>
@@ -49,8 +56,8 @@ const PageHeader = () => {
         <Button type={"link"} onClick={() => navigate(`/`)}>
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
         </Button>
-        <h2>项目</h2>
-        <h2>用户</h2>
+        <ProjectPopover />
+        <span>用户</span>
       </HeaderLeft>
       <HeaderRight>
         <Dropdown menu={{ items }}>

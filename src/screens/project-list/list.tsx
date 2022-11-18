@@ -1,9 +1,12 @@
-import { Table, TableProps } from "antd";
+import { Dropdown, Table, TableProps } from "antd";
 import { User } from "./searchPanel";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import { useEditProjec } from "utils/Project";
+import { ButtonNoPadding } from "components/lib";
+import { useAppDispatch } from "store";
+import { openProjectModal } from "store/modules/openCard";
 export interface Project {
   id: number;
   name: string;
@@ -22,6 +25,7 @@ export const List = ({ users, retry, ...props }: ListProps) => {
   const { mutate } = useEditProjec();
   const pinProject = (id: number) => (pin: boolean) =>
     mutate({ id, pin }).then(() => retry());
+  const dispatch = useAppDispatch();
 
   return (
     <Table
@@ -68,6 +72,31 @@ export const List = ({ users, retry, ...props }: ListProps) => {
           render(value) {
             return (
               <span>{value ? dayjs(value).format("YYYY-MM-DD") : "无"}</span>
+            );
+          },
+        },
+        {
+          render() {
+            return (
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      label: (
+                        <ButtonNoPadding
+                          onClick={() => dispatch(openProjectModal())}
+                          type={"link"}
+                        >
+                          编辑
+                        </ButtonNoPadding>
+                      ),
+                      key: "edit",
+                    },
+                  ],
+                }}
+              >
+                <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
+              </Dropdown>
             );
           },
         },
