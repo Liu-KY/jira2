@@ -9,12 +9,10 @@ import { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Routes, Route, Navigate, useNavigate } from "react-router";
 import { ProjectScreens } from "screens/project";
-import { useAppDispatch } from "store";
 import { ProjectModal } from "screens/project-list/projectModal";
 import { ProjectPopover } from "components/projectPopover";
 
 export const AuthenticatedApp = () => {
-  const dispatch = useAppDispatch();
   return (
     <Container>
       <BrowserRouter>

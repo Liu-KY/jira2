@@ -9,6 +9,7 @@ export const useProject = (params?: Partial<Project>) => {
   const http = useHttp();
   const async = useCallback(
     () => http("projects", { data: cleanObject(params || {}) }),
+
     [http, params]
   );
 
