@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import openCard from "./modules/openCard";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import openCard from "./modules/openCard";
+import auth from "./modules/auth";
 
 export const store = configureStore({
   reducer: {
     openCard,
+    auth,
   },
 });
 

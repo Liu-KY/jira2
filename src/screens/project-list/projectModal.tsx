@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "store";
 import { closeProjectModal, projectModalOpen } from "store/modules/openCard";
 
 const DrawerCss = {
-  [".ant-drawer-header-title"]: {
+  ".ant-drawer-header-title": {
     flexDirection: "row-reverse",
   },
 } as Interpolation<Theme>;
