@@ -1,36 +1,21 @@
 /* @jsxImportSource @emotion/react */
 import { Interpolation, Theme } from "@emotion/react";
 import { Button, Drawer } from "antd";
-import { useAppDispatch, useAppSelector } from "store";
-import { closeProjectModal, projectModalOpen } from "store/modules/openCard";
+import { useProjectModal } from "../../utils/Project";
 
 const DrawerCss = {
-  [".ant-drawer-header-title"]: {
+  ".ant-drawer-header-title": {
     flexDirection: "row-reverse",
   },
 } as Interpolation<Theme>;
 
 export const ProjectModal = () => {
-  const dispatch = useAppDispatch();
-  const open = useAppSelector(projectModalOpen);
+  const { close, projectCreate } = useProjectModal();
 
   return (
-    <Drawer
-      onClose={() => {
-        dispatch(closeProjectModal());
-      }}
-      open={open}
-      width={"100%"}
-      css={DrawerCss}
-    >
+    <Drawer onClose={close} open={projectCreate} width={"100%"} css={DrawerCss}>
       <h1>Project Modal</h1>
-      <Button
-        onClick={() => {
-          dispatch(closeProjectModal());
-        }}
-      >
-        关闭
-      </Button>
+      <Button onClick={close}>关闭</Button>
     </Drawer>
   );
 };

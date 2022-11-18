@@ -3,10 +3,9 @@ import { User } from "./searchPanel";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
-import { useEditProjec } from "utils/Project";
+import { useEditProjec, useProjectModal } from "utils/Project";
 import { ButtonNoPadding } from "components/lib";
-import { useAppDispatch } from "store";
-import { openProjectModal } from "store/modules/openCard";
+
 export interface Project {
   id: number;
   name: string;
@@ -25,8 +24,7 @@ export const List = ({ users, retry, ...props }: ListProps) => {
   const { mutate } = useEditProjec();
   const pinProject = (id: number) => (pin: boolean) =>
     mutate({ id, pin }).then(() => retry());
-  const dispatch = useAppDispatch();
-
+  const { open } = useProjectModal();
   return (
     <Table
       pagination={false}
@@ -83,10 +81,7 @@ export const List = ({ users, retry, ...props }: ListProps) => {
                   items: [
                     {
                       label: (
-                        <ButtonNoPadding
-                          onClick={() => dispatch(openProjectModal())}
-                          type={"link"}
-                        >
+                        <ButtonNoPadding onClick={open} type={"link"}>
                           编辑
                         </ButtonNoPadding>
                       ),

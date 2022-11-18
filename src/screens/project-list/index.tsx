@@ -2,13 +2,11 @@ import { List } from "./list";
 import { SearchPanel } from "./searchPanel";
 import { useDebounce, useDocumentTitle } from "utils";
 import styled from "@emotion/styled";
-import { useProject } from "utils/Project";
+import { useProject, useProjectModal } from "utils/Project";
 import { useUsers } from "utils/Users";
 import { Typography } from "antd";
 import { useProjectsSearchParams } from "./util";
 import { ButtonNoPadding, Row } from "components/lib";
-import { useAppDispatch } from "store";
-import { openProjectModal } from "store/modules/openCard";
 
 export const ProjectListScreens = () => {
   useDocumentTitle("项目列表", false);
@@ -21,16 +19,13 @@ export const ProjectListScreens = () => {
     retry,
   } = useProject(useDebounce(param, 500));
   const { data: users } = useUsers();
-  const dispatch = useAppDispatch();
+  const { open } = useProjectModal();
 
   return (
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        <ButtonNoPadding
-          onClick={() => dispatch(openProjectModal())}
-          type={"link"}
-        >
+        <ButtonNoPadding onClick={open} type={"link"}>
           创建项目
         </ButtonNoPadding>
       </Row>

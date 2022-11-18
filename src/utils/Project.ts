@@ -3,6 +3,7 @@ import { Project } from "screens/project-list/list";
 import { cleanObject } from "utils";
 import { useHttp } from "./http";
 import { useAsync } from "./useAsync";
+import { useUrlQueryParam } from "./url";
 
 export const useProject = (params?: Partial<Project>) => {
   const { run, ...remain } = useAsync<Project[]>();
@@ -37,20 +38,33 @@ export const useEditProjec = () => {
   };
 };
 
-export const useAddProjec = () => {
-  const { run, ...remain } = useAsync<Project[]>();
-  const http = useHttp();
-  const mutate = (params: Partial<Project>) => {
-    run(
-      http(`projects/${params.id}`, {
-        data: params,
-        method: "POST",
-      })
-    );
-  };
+// export const useAddProjec = () => {
+//     const {run, ...remain} = useAsync<Project[]>();
+//     const http = useHttp();
+//     const mutate = (params: Partial<Project>) => {
+//         run(
+//             http(`projects/${params.id}`, {
+//                 data: params,
+//                 method: "POST",
+//             })
+//         );
+//     };
+//
+//     return {
+//         mutate,
+//         ...remain,
+//     };
+// };
+
+export const useProjectModal = () => {
+  const [{ projectCreate }, setUrlParams] = useUrlQueryParam(["projectCreate"]);
+
+  const open = () => setUrlParams({ projectCreate: true });
+  const close = () => setUrlParams({ projectCreate: undefined });
 
   return {
-    mutate,
-    ...remain,
+    projectCreate: projectCreate === "true",
+    open,
+    close,
   };
 };
