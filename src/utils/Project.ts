@@ -2,7 +2,8 @@ import { Project } from "screens/project-list/list";
 import { cleanObject } from "utils";
 import { useHttp } from "./http";
 import { useAsync } from "./useAsync";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { QueryKey, useMutation, useQuery } from "react-query";
+import { useEditConfig } from "./use-optimistic-options";
 
 export const useProjects = (params?: Partial<Project>) => {
   const http = useHttp();
@@ -12,9 +13,8 @@ export const useProjects = (params?: Partial<Project>) => {
   );
 };
 
-export const useEditProject = () => {
+export const useEditProject = (queryKey: QueryKey) => {
   const http = useHttp();
-  const queryClient = useQueryClient();
 
   return useMutation(
     (params: Partial<Project>) =>
@@ -22,15 +22,14 @@ export const useEditProject = () => {
         data: params,
         method: "PATCH",
       }),
-    {
-      onSuccess: () => queryClient.invalidateQueries("projects"),
-    }
+    useEditConfig(queryKey)
   );
 };
 
 export const useAddProject = () => {
   const { run, ...remain } = useAsync<Project[]>();
   const http = useHttp();
+
   const mutate = (params: Partial<Project>) => {
     run(
       http(`projects/${params.id}`, {

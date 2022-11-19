@@ -7,6 +7,7 @@ import { Pin } from "components/pin";
 import { ButtonNoPadding } from "components/lib";
 import { useProjectModal } from "./util";
 import { useEditProject } from "../../utils/Project";
+import { useProjectsQueryKey } from "./util";
 
 export interface Project {
   id: number;
@@ -22,9 +23,8 @@ interface ListProps extends TableProps<Project> {
 }
 
 export const List = ({ users, ...props }: ListProps) => {
-  const { mutate } = useEditProject();
+  const { mutate } = useEditProject(useProjectsQueryKey());
   const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
-  const { open } = useProjectModal();
 
   return (
     <Table
@@ -33,7 +33,7 @@ export const List = ({ users, ...props }: ListProps) => {
       columns={[
         {
           title: <Pin checked={true} disabled={true} />,
-          render(value, project) {
+          render(_, project) {
             return (
               <Pin
                 checked={project.pin}
@@ -75,29 +75,43 @@ export const List = ({ users, ...props }: ListProps) => {
           },
         },
         {
-          render() {
-            return (
-              <Dropdown
-                menu={{
-                  items: [
-                    {
-                      label: (
-                        <ButtonNoPadding onClick={open} type={"link"}>
-                          编辑
-                        </ButtonNoPadding>
-                      ),
-                      key: "edit",
-                    },
-                  ],
-                }}
-              >
-                <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
-              </Dropdown>
-            );
+          render(_, project) {
+            return <ListDropdownButton project={project} />;
           },
         },
       ]}
       {...props}
     />
+  );
+};
+
+const ListDropdownButton = ({ project }: { project: Project }) => {
+  const { open } = useProjectModal();
+
+  return (
+    <Dropdown
+      menu={{
+        items: [
+          {
+            label: (
+              <ButtonNoPadding onClick={open} type={"link"}>
+                编辑
+              </ButtonNoPadding>
+            ),
+            key: "edit",
+          },
+          {
+            label: (
+              <ButtonNoPadding onClick={open} type={"link"}>
+                删除
+              </ButtonNoPadding>
+            ),
+            key: "delete",
+          },
+        ],
+      }}
+    >
+      <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
+    </Dropdown>
   );
 };

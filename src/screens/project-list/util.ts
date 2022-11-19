@@ -28,3 +28,8 @@ export const useProjectModal = () => {
     close,
   };
 };
+
+export const useProjectsQueryKey = () => {
+  const [params] = useProjectsSearchParams();
+  return ["projects", params];
+};

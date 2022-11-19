@@ -26,7 +26,7 @@ export const http = (
   if (config.method.toUpperCase() === "GET") {
     endpoint += `?${qs.stringify(data)}`;
   } else {
-    config.body = JSON.stringify(data);
+    config.body = JSON.stringify(data || {});
   }
 
   return window
