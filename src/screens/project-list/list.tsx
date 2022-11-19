@@ -1,4 +1,4 @@
-import { Dropdown, Table, TableProps } from "antd";
+import { Dropdown, Modal, Table, TableProps } from "antd";
 import { User } from "./searchPanel";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
@@ -6,7 +6,11 @@ import { Pin } from "components/pin";
 
 import { ButtonNoPadding } from "components/lib";
 import { useProjectModal } from "./util";
-import { useEditProject } from "../../utils/Project";
+import {
+  useDeleteProject,
+  useEditProject,
+  useProject,
+} from "../../utils/Project";
 import { useProjectsQueryKey } from "./util";
 
 export interface Project {
@@ -86,7 +90,23 @@ export const List = ({ users, ...props }: ListProps) => {
 };
 
 const ListDropdownButton = ({ project }: { project: Project }) => {
-  const { open } = useProjectModal();
+  const { startEdit } = useProjectModal();
+  const projecEdit =
+    ({ id }: { id: number }) =>
+    () =>
+      startEdit(id);
+
+  const { mutate: deleteProject } = useDeleteProject(useProjectsQueryKey());
+  const confirmDeleteProject = ({ id }: { id: number }) => {
+    Modal.confirm({
+      title: "确定要删除这个项目吗？",
+      content: "点击确定删除",
+      okText: "确定",
+      onOk() {
+        deleteProject(id);
+      },
+    });
+  };
 
   return (
     <Dropdown
@@ -94,7 +114,7 @@ const ListDropdownButton = ({ project }: { project: Project }) => {
         items: [
           {
             label: (
-              <ButtonNoPadding onClick={open} type={"link"}>
+              <ButtonNoPadding onClick={projecEdit(project)} type={"link"}>
                 编辑
               </ButtonNoPadding>
             ),
@@ -102,7 +122,10 @@ const ListDropdownButton = ({ project }: { project: Project }) => {
           },
           {
             label: (
-              <ButtonNoPadding onClick={open} type={"link"}>
+              <ButtonNoPadding
+                onClick={() => confirmDeleteProject(project)}
+                type={"link"}
+              >
                 删除
               </ButtonNoPadding>
             ),

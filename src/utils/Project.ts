@@ -1,9 +1,12 @@
 import { Project } from "screens/project-list/list";
 import { cleanObject } from "utils";
 import { useHttp } from "./http";
-import { useAsync } from "./useAsync";
 import { QueryKey, useMutation, useQuery } from "react-query";
-import { useEditConfig } from "./use-optimistic-options";
+import {
+  useAddConfig,
+  useDeleteConfig,
+  useEditConfig,
+} from "./use-optimistic-options";
 
 export const useProjects = (params?: Partial<Project>) => {
   const http = useHttp();
@@ -26,25 +29,35 @@ export const useEditProject = (queryKey: QueryKey) => {
   );
 };
 
-export const useAddProject = () => {
-  const { run, ...remain } = useAsync<Project[]>();
+export const useAddProject = (queryKey: QueryKey) => {
   const http = useHttp();
 
-  const mutate = (params: Partial<Project>) => {
-    run(
-      http(`projects/${params.id}`, {
+  return useMutation(
+    (params: Partial<Project>) =>
+      http(`projects`, {
         data: params,
         method: "POST",
-      })
-    );
-  };
-
-  return {
-    mutate,
-    ...remain,
-  };
+      }),
+    useAddConfig(queryKey)
+  );
 };
 
-export const useDeleteProject = () => {};
+export const useDeleteProject = (queryKey: QueryKey) => {
+  const http = useHttp();
 
-export const useProject = () => {};
+  return useMutation(
+    (id: number) =>
+      http(`projects/${id}`, {
+        method: "DELETE",
+      }),
+    useDeleteConfig(queryKey)
+  );
+};
+
+export const useProject = (id?: number) => {
+  const http = useHttp();
+
+  return useQuery(["project", { id }], () => http(`projects/${id}`), {
+    enabled: !!id,
+  });
+};

@@ -3,11 +3,17 @@ import { useProjects } from "utils/Project";
 import styled from "@emotion/styled";
 import { ButtonNoPadding } from "./lib";
 import { useProjectModal } from "../screens/project-list/util";
+import { useMemo } from "react";
 
 export const ProjectPopover = () => {
   const { data: projects } = useProjects();
-  const pinnedProjects = projects?.filter((project) => project.pin);
+
+  const pinnedProjects = useMemo(
+    () => projects?.filter((project) => project.pin),
+    [projects]
+  );
   const { open } = useProjectModal();
+
   const content = (
     <ContentContainer>
       <Typography.Text type={"secondary"}>收藏项目</Typography.Text>
