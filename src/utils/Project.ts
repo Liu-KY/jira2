@@ -1,39 +1,31 @@
-import { useCallback, useEffect } from "react";
 import { Project } from "screens/project-list/list";
 import { cleanObject } from "utils";
 import { useHttp } from "./http";
 import { useAsync } from "./useAsync";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export const useProjects = (params?: Partial<Project>) => {
-  const { run, ...remain } = useAsync<Project[]>();
   const http = useHttp();
-  const async = useCallback(
-    () => http("projects", { data: cleanObject(params || {}) }),
-    [http, params]
-  );
 
-  useEffect(() => {
-    run(async(), { retry: async });
-  }, [params, run, async]);
-  return remain;
+  return useQuery<Project[]>(["projects", params], () =>
+    http("projects", { data: cleanObject(params || {}) })
+  );
 };
 
 export const useEditProject = () => {
-  const { run, ...remain } = useAsync<Project[]>();
   const http = useHttp();
-  const mutate = (params: Partial<Project>) => {
-    return run(
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (params: Partial<Project>) =>
       http(`projects/${params.id}`, {
         data: params,
         method: "PATCH",
-      })
-    );
-  };
-
-  return {
-    mutate,
-    ...remain,
-  };
+      }),
+    {
+      onSuccess: () => queryClient.invalidateQueries("projects"),
+    }
+  );
 };
 
 export const useAddProject = () => {

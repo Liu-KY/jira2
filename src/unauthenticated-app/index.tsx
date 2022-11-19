@@ -1,4 +1,4 @@
-import { Button, Card, Divider, Typography } from "antd";
+import { Button, Card, Divider } from "antd";
 import { useState } from "react";
 import { Login } from "./login";
 import { Register } from "./register";
@@ -7,6 +7,7 @@ import logo from "assets/logo.svg";
 import left from "assets/left.svg";
 import right from "assets/right.svg";
 import { useDocumentTitle } from "utils";
+import { ErrorBox } from "components/lib";
 
 export const Unauthenticated = () => {
   const [toggle, setToggle] = useState(true);
@@ -20,9 +21,7 @@ export const Unauthenticated = () => {
 
       <ShadowCard>
         <Title>{toggle ? "请登录" : "请注册"}</Title>
-        {error && (
-          <Typography.Text type={"danger"}>{error.message}</Typography.Text>
-        )}
+        <ErrorBox error={error} />
         {toggle ? (
           <Login setError={setError} />
         ) : (

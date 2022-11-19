@@ -41,10 +41,19 @@ export const LoadingFullPafe = () => {
 export const ErrorFullPafe = ({ error }: { error: null | Error }) => (
   <FullPage>
     <DevTools />
-    <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
+    <ErrorBox error={error} />
   </FullPage>
 );
 
 export const ButtonNoPadding = styled(Button)`
   padding: 0;
 `;
+
+const isError = (value: unknown): value is Error => !!value;
+
+export const ErrorBox = ({ error }: { error: unknown }) => {
+  if (isError(error)) {
+    <Typography.Text>{error.message}</Typography.Text>;
+  }
+  return null;
+};

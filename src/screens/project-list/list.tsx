@@ -19,14 +19,13 @@ export interface Project {
 
 interface ListProps extends TableProps<Project> {
   users: User[];
-  retry: () => void;
 }
 
-export const List = ({ users, retry, ...props }: ListProps) => {
+export const List = ({ users, ...props }: ListProps) => {
   const { mutate } = useEditProject();
-  const pinProject = (id: number) => (pin: boolean) =>
-    mutate({ id, pin }).then(() => retry());
+  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
   const { open } = useProjectModal();
+
   return (
     <Table
       pagination={false}
