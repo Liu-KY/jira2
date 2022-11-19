@@ -3,8 +3,10 @@ import { User } from "./searchPanel";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
-import { useEditProjec, useProjectModal } from "utils/Project";
+
 import { ButtonNoPadding } from "components/lib";
+import { useProjectModal } from "./util";
+import { useEditProject } from "../../utils/Project";
 
 export interface Project {
   id: number;
@@ -21,7 +23,7 @@ interface ListProps extends TableProps<Project> {
 }
 
 export const List = ({ users, retry, ...props }: ListProps) => {
-  const { mutate } = useEditProjec();
+  const { mutate } = useEditProject();
   const pinProject = (id: number) => (pin: boolean) =>
     mutate({ id, pin }).then(() => retry());
   const { open } = useProjectModal();

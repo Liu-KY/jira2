@@ -2,10 +2,10 @@ import { List } from "./list";
 import { SearchPanel } from "./searchPanel";
 import { useDebounce, useDocumentTitle } from "utils";
 import styled from "@emotion/styled";
-import { useProject, useProjectModal } from "utils/Project";
+import { useProjects } from "utils/Project";
 import { useUsers } from "utils/Users";
 import { Typography } from "antd";
-import { useProjectsSearchParams } from "./util";
+import { useProjectModal, useProjectsSearchParams } from "./util";
 import { ButtonNoPadding, Row } from "components/lib";
 
 export const ProjectListScreens = () => {
@@ -17,7 +17,7 @@ export const ProjectListScreens = () => {
     isLoading,
     error,
     retry,
-  } = useProject(useDebounce(param, 500));
+  } = useProjects(useDebounce(param, 500));
   const { data: users } = useUsers();
   const { open } = useProjectModal();
 

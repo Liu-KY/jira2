@@ -1,7 +1,7 @@
 /* @jsxImportSource @emotion/react */
 import { Interpolation, Theme } from "@emotion/react";
 import { Button, Drawer } from "antd";
-import { useProjectModal } from "../../utils/Project";
+import { useProjectModal } from "./util";
 
 const DrawerCss = {
   ".ant-drawer-header-title": {
