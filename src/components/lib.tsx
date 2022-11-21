@@ -31,7 +31,7 @@ export const FullPage = styled.div`
   align-items: center;
 `;
 
-export const LoadingFullPafe = () => {
+export const LoadingFullPage = () => {
   return (
     <FullPage>
       <Spin size={"large"} />
@@ -39,7 +39,7 @@ export const LoadingFullPafe = () => {
   );
 };
 
-export const ErrorFullPafe = ({ error }: { error: null | Error }) => (
+export const ErrorFullPage = ({ error }: { error: null | Error }) => (
   <FullPage>
     <DevTools />
     <ErrorBox error={error} />

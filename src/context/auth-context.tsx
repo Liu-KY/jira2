@@ -3,7 +3,7 @@ import * as auth from "auth-provider";
 import { useMount } from "utils";
 import { http } from "utils/http";
 import { useAsync } from "utils/useAsync";
-import { ErrorFullPafe, LoadingFullPafe } from "components/lib";
+import { ErrorFullPage, LoadingFullPage } from "components/lib";
 import { useQueryClient } from "react-query";
 import { User } from "../types/user";
 
@@ -55,11 +55,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
 
   if (isLoading || isIdle) {
-    return <LoadingFullPafe />;
+    return <LoadingFullPage />;
   }
 
   if (isError) {
-    return <ErrorFullPafe error={error} />;
+    return <ErrorFullPage error={error} />;
   }
   return (
     <AuthContext.Provider
