@@ -31,6 +31,6 @@ export const ProjectListScreens = () => {
   );
 };
 
-const Container = styled.div`
+export const Container = styled.div`
   padding: 3.2rem;
 `;

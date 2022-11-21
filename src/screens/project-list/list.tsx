@@ -78,7 +78,7 @@ export const List = ({ users, ...props }: ListProps) => {
 
 const ListDropdownButton = ({ project }: { project: Project }) => {
   const { startEdit } = useProjectModal();
-  const projecEdit =
+  const projectEdit =
     ({ id }: { id: number }) =>
     () =>
       startEdit(id);
@@ -101,7 +101,7 @@ const ListDropdownButton = ({ project }: { project: Project }) => {
         items: [
           {
             label: (
-              <ButtonNoPadding onClick={projecEdit(project)} type={"link"}>
+              <ButtonNoPadding onClick={projectEdit(project)} type={"link"}>
                 编辑
               </ButtonNoPadding>
             ),

@@ -24,4 +24,13 @@ module.exports = {
       logging: "log",
     },
   },
+  webpack: {
+    configure: (config, { env, paths }) => {
+      config.module.rules.push({
+        test: /\.svg$/,
+        loader: "svg-inline-loader",
+      });
+      return config;
+    },
+  },
 };

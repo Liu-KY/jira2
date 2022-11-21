@@ -1,3 +1,5 @@
+import { Container } from "../project-list";
+
 export const EpicScreen = () => {
-  return <div>Epic</div>;
+  return <Container>Epic</Container>;
 };
