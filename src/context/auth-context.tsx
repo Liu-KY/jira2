@@ -1,10 +1,11 @@
 import React, { ReactNode, useContext } from "react";
 import * as auth from "auth-provider";
-import { User } from "screens/project-list/searchPanel";
 import { useMount } from "utils";
 import { http } from "utils/http";
 import { useAsync } from "utils/useAsync";
 import { ErrorFullPafe, LoadingFullPafe } from "components/lib";
+import { useQueryClient } from "react-query";
+import { User } from "../types/user";
 
 const AuthContext = React.createContext<
   | {
@@ -37,10 +38,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setData: setUser,
     isIdle,
   } = useAsync<User | null>();
+
+  const queryClient = useQueryClient();
   const login = (AuthForm: auth.UserData) => auth.login(AuthForm).then(setUser);
   const register = (AuthForm: auth.UserData) =>
     auth.register(AuthForm).then(setUser);
-  const logout = () => auth.logout().then(() => setUser(null));
+
+  const logout = () =>
+    auth.logout().then(() => {
+      setUser(null);
+      queryClient.clear();
+    });
 
   useMount(() => {
     run(bootstrapUser());

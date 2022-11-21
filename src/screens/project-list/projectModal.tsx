@@ -18,9 +18,9 @@ const DrawerCss = {
 
 export const ProjectModal = () => {
   const { close, projectCreate, editingProject, isLoading } = useProjectModal();
+  const [form] = useForm();
 
   const useMutateProject = editingProject ? useEditProject : useAddProject;
-  const [form] = useForm();
   const {
     mutateAsync,
     error,
@@ -33,13 +33,17 @@ export const ProjectModal = () => {
     close();
   };
 
+  const modealCloss = () => {
+    form.resetFields();
+    close();
+  };
   useEffect(() => {
     form.setFieldsValue(editingProject);
   }, [editingProject, form]);
 
   return (
     <Drawer
-      onClose={close}
+      onClose={modealCloss}
       open={projectCreate}
       width={"100%"}
       css={DrawerCss}

@@ -31,7 +31,6 @@ export const useEditConfig = (queryKey: QueryKey) =>
   );
 export const useDeleteConfig = (queryKey: QueryKey) =>
   useConfig(queryKey, (target, old) => {
-    console.log(old);
     return old?.filter((item) => item.id !== target.id) || [];
   });
 export const useAddConfig = (queryKey: QueryKey) =>

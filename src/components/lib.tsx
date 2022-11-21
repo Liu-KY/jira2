@@ -11,6 +11,7 @@ export const Row = styled.div<{
   align-items: center;
   justify-content: ${(props) => (props.between ? "space-between" : undefined)};
   margin-bottom: ${(props) => props.marginBottom + "rem"};
+
   > * {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
@@ -49,11 +50,11 @@ export const ButtonNoPadding = styled(Button)`
   padding: 0;
 `;
 
-const isError = (value: unknown): value is Error => !!value;
+const isError = (value: any): value is Error => value?.message;
 
 export const ErrorBox = ({ error }: { error: unknown }) => {
-  if (isError(error)) {
-    <Typography.Text>{error.message}</Typography.Text>;
-  }
+  if (isError(error))
+    return <Typography.Text type={"danger"}>{error.message}</Typography.Text>;
+
   return null;
 };
