@@ -4,8 +4,7 @@ import { Task } from "../../types/task";
 import { useTasks } from "../../utils/task";
 import { useTasksSearchParams } from "./utils";
 import styled from "@emotion/styled";
-import taskIcon from "assets/task.svg";
-import bugIcon from "assets/bug.svg";
+
 import { useTaskTypes } from "utils/task-type";
 
 const TaskTypeIcon = ({ id }: { id: number }) => {
@@ -14,7 +13,7 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
   if (!name) {
     return null;
   }
-  return <img alt={"task-icon"} src={name === "task" ? taskIcon : bugIcon} />;
+  return name === "task" ? <p>完成</p> : <p>bug</p>;
 };
 
 const TaskCard = ({ task }: { task: Task }) => {
