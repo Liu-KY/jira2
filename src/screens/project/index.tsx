@@ -46,7 +46,7 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const Aside = styled.div`
+const Aside = styled.aside`
   background-color: rgb(244, 245, 247);
   display: flex;
 `;

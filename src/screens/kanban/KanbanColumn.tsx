@@ -1,5 +1,5 @@
 import { Kanban } from "types/kanban";
-import { Card } from "antd";
+import { Card, Typography } from "antd";
 import { Task } from "../../types/task";
 import { useTasks } from "../../utils/task";
 import { useTasksSearchParams } from "./utils";
@@ -13,7 +13,11 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
   if (!name) {
     return null;
   }
-  return name === "task" ? <p>完成</p> : <p>bug</p>;
+  return name === "task" ? (
+    <Typography.Text type={"success"}>完成</Typography.Text>
+  ) : (
+    <Typography.Text type={"danger"}>bug</Typography.Text>
+  );
 };
 
 const TaskCard = ({ task }: { task: Task }) => {
@@ -45,9 +49,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.7rem 0.7rem 1rem;
-  margin-right: 1.5rem;
+  margin: 0 1.5rem 1.5rem 0;
   min-width: 27rem;
-  min-height: 27rem;
   border-radius: 7px;
   background-color: rgb(244, 245, 247);
 `;

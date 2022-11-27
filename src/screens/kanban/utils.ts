@@ -38,4 +38,5 @@ export const useTasksSearchParams = () => {
     [debouncedName, param, projectId, setParam]
   );
 };
+
 export const useTasksQueryKey = () => ["tasks", useTasksSearchParams()];
