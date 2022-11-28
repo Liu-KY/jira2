@@ -1,12 +1,14 @@
 import { Kanban } from "types/kanban";
-import { Card, Typography } from "antd";
+import { Button, Card, Dropdown, Modal, Typography } from "antd";
 import { Task } from "../../types/task";
 import { useTasks } from "../../utils/task";
-import { useTaskModal, useTasksSearchParams } from "./utils";
+import { useKanbanQueryKey, useTaskModal, useTasksSearchParams } from "./utils";
 import styled from "@emotion/styled";
 import { useTaskTypes } from "utils/task-type";
 import { CreateTask } from "./create-task";
-import { useDebounce } from "../../utils";
+import { Mark } from "components/mark";
+import { Row } from "../../components/lib";
+import { useDeleteKanban } from "../../utils/kanban";
 
 const TaskTypeIcon = ({ id }: { id: number }) => {
   const { data: taskTypes } = useTaskTypes();
@@ -23,21 +25,28 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
 
 const TaskCard = ({ task }: { task: Task }) => {
   const { startEdit } = useTaskModal();
+  const { name } = useTasksSearchParams();
   return (
     <Card style={{ flex: "1" }} onClick={() => startEdit(task.id)}>
-      <p>{task.name}</p>
+      <p>
+        <Mark keyword={name} name={task.name} />
+      </p>
       <TaskTypeIcon id={task.typeId} />
     </Card>
   );
 };
 
 export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
-  const { data: allTasks } = useTasks(useDebounce(useTasksSearchParams(), 500));
+  const taskSearchParams = useTasksSearchParams();
+  const { data: allTasks } = useTasks(taskSearchParams);
   const tasks = allTasks?.filter((task) => task.kanbanId === kanban.id);
 
   return (
     <Container>
-      <h3>{kanban.name}</h3>
+      <Row between={true}>
+        <h3>{kanban.name}</h3>
+        <More kanban={kanban} />
+      </Row>
       <TasksContainer>
         {tasks?.map((task) => (
           <TaskCard task={task} key={task.id} />
@@ -45,6 +54,37 @@ export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
         <CreateTask kanbanId={kanban.id} />
       </TasksContainer>
     </Container>
+  );
+};
+
+const More = ({ kanban }: { kanban: Kanban }) => {
+  const { mutateAsync } = useDeleteKanban(useKanbanQueryKey());
+  const startDelete = () => {
+    Modal.confirm({
+      title: "删除看板",
+      okText: "确定",
+      cancelText: "取消",
+      onOk() {
+        return mutateAsync(kanban.id);
+      },
+    });
+  };
+
+  const items = [
+    {
+      label: (
+        <Button onClick={startDelete} type={"link"}>
+          删除
+        </Button>
+      ),
+      key: "delete",
+    },
+  ];
+
+  return (
+    <Dropdown menu={{ items }}>
+      <Button type={"link"}>...</Button>
+    </Dropdown>
   );
 };
 
@@ -62,6 +102,7 @@ export const Container = styled.div`
 const TasksContainer = styled.div`
   overflow: scroll;
   flex: 1;
+
   ::-webkit-scrollbar {
     display: none;
   }

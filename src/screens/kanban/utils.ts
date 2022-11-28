@@ -53,7 +53,6 @@ export const useTaskModal = () => {
 
   return {
     editingTaskId,
-    setEditingTaskId,
     editingTask,
     startEdit,
     close,

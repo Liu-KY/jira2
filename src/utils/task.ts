@@ -1,13 +1,19 @@
 import { useHttp } from "./http";
 import { QueryKey, useMutation, useQuery } from "react-query";
 import { Task } from "../types/task";
-import { useAddConfig, useEditConfig } from "./use-optimistic-options";
+import {
+  useAddConfig,
+  useDeleteConfig,
+  useEditConfig,
+} from "./use-optimistic-options";
+import { useDebounce } from "./index";
 
 export const useTasks = (param?: Partial<Task>) => {
   const http = useHttp();
+  const debouncedParam = { ...param, name: useDebounce(param?.name, 200) };
 
-  return useQuery<Task[]>(["tasks", param], () =>
-    http("tasks", { data: param })
+  return useQuery<Task[]>(["tasks", debouncedParam], () =>
+    http("tasks", { data: debouncedParam })
   );
 };
 
@@ -42,5 +48,17 @@ export const useEditTask = (queryKey: QueryKey) => {
         method: "PATCH",
       }),
     useEditConfig(queryKey)
+  );
+};
+
+export const useDeleteTask = (queryKey: QueryKey) => {
+  const http = useHttp();
+
+  return useMutation(
+    (id: number) =>
+      http(`tasks/${id}`, {
+        method: "DELETE",
+      }),
+    useDeleteConfig(queryKey)
   );
 };

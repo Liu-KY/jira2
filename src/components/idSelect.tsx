@@ -22,7 +22,6 @@ export const IdSelect = ({
     <Select
       value={toNumber(value)}
       onChange={(value) => {
-        console.log(value);
         onChange?.(toNumber(value) || undefined);
       }}
       {...resetProps}

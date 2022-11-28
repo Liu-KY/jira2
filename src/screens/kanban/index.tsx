@@ -1,4 +1,4 @@
-import { useDebounce, useDocumentTitle } from "../../utils";
+import { useDocumentTitle } from "../../utils";
 import {
   useKanbanSearchParams,
   useProjectInUrl,
@@ -20,9 +20,8 @@ export const KanBanScreens = () => {
   const { data: kanbans, isLoading: kanbanLoading } = useKanbans(
     useKanbanSearchParams()
   );
-  const { isLoading: taskLoading } = useTasks(
-    useDebounce(useTasksSearchParams(), 500)
-  );
+
+  const { isLoading: taskLoading } = useTasks(useTasksSearchParams());
   const isLoading = kanbanLoading || taskLoading;
 
   return (
