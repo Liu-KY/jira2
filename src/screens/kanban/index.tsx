@@ -12,6 +12,7 @@ import { SelectPanel } from "./selectPanel";
 import { useTasks } from "../../utils/task";
 import { Spin } from "antd";
 import { CreateKanban } from "./create-kanban";
+import { TaskModal } from "./task-modal";
 
 export const KanBanScreens = () => {
   useDocumentTitle("看板列表");
@@ -38,6 +39,7 @@ export const KanBanScreens = () => {
           <CreateKanban />
         </ColumnsContainer>
       )}
+      <TaskModal />
     </ScreenContainer>
   );
 };

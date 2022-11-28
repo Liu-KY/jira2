@@ -27,7 +27,9 @@ export const IdSelect = ({
       }}
       {...resetProps}
     >
-      <Select.Option value={0}>{defaultOptionName}</Select.Option>
+      {defaultOptionName ? (
+        <Select.Option value={0}>{defaultOptionName}</Select.Option>
+      ) : null}
       {options.map((user) => (
         <Select.Option key={user.id} value={user.id}>
           {user.name}

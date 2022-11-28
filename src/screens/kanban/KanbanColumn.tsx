@@ -2,7 +2,7 @@ import { Kanban } from "types/kanban";
 import { Card, Typography } from "antd";
 import { Task } from "../../types/task";
 import { useTasks } from "../../utils/task";
-import { useTasksSearchParams } from "./utils";
+import { useTaskModal, useTasksSearchParams } from "./utils";
 import styled from "@emotion/styled";
 import { useTaskTypes } from "utils/task-type";
 import { CreateTask } from "./create-task";
@@ -22,8 +22,9 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
 };
 
 const TaskCard = ({ task }: { task: Task }) => {
+  const { startEdit } = useTaskModal();
   return (
-    <Card style={{ flex: "1" }}>
+    <Card style={{ flex: "1" }} onClick={() => startEdit(task.id)}>
       <p>{task.name}</p>
       <TaskTypeIcon id={task.typeId} />
     </Card>
