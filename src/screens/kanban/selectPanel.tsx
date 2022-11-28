@@ -27,10 +27,12 @@ export const SelectPanel = () => {
       />
       <UserSelect
         defaultOptionName={"经办人"}
+        value={searchParams.processorId}
         onChange={(value) => setSearchParams({ processorId: value })}
       />
       <TaskSelect
         defaultOptionName={"类型"}
+        value={searchParams.typeId}
         onChange={(value) => setSearchParams({ typeId: value })}
       />
       <Button onClick={reset}> 清空 </Button>

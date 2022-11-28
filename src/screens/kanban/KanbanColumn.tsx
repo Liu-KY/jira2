@@ -4,8 +4,9 @@ import { Task } from "../../types/task";
 import { useTasks } from "../../utils/task";
 import { useTasksSearchParams } from "./utils";
 import styled from "@emotion/styled";
-
 import { useTaskTypes } from "utils/task-type";
+import { CreateTask } from "./create-task";
+import { useDebounce } from "../../utils";
 
 const TaskTypeIcon = ({ id }: { id: number }) => {
   const { data: taskTypes } = useTaskTypes();
@@ -30,7 +31,7 @@ const TaskCard = ({ task }: { task: Task }) => {
 };
 
 export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
-  const { data: allTasks } = useTasks(useTasksSearchParams());
+  const { data: allTasks } = useTasks(useDebounce(useTasksSearchParams(), 500));
   const tasks = allTasks?.filter((task) => task.kanbanId === kanban.id);
 
   return (
@@ -40,12 +41,13 @@ export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
         {tasks?.map((task) => (
           <TaskCard task={task} key={task.id} />
         ))}
+        <CreateTask kanbanId={kanban.id} />
       </TasksContainer>
     </Container>
   );
 };
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.7rem 0.7rem 1rem;
@@ -53,12 +55,12 @@ const Container = styled.div`
   min-width: 27rem;
   border-radius: 7px;
   background-color: rgb(244, 245, 247);
+  overflow: hidden;
 `;
 
 const TasksContainer = styled.div`
   overflow: scroll;
   flex: 1;
-
   ::-webkit-scrollbar {
     display: none;
   }
