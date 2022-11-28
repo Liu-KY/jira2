@@ -13,6 +13,7 @@ import { useTasks } from "../../utils/task";
 import { Spin } from "antd";
 import { CreateKanban } from "./create-kanban";
 import { TaskModal } from "./task-modal";
+import { DragDropContext } from "react-beautiful-dnd";
 
 export const KanBanScreens = () => {
   useDocumentTitle("看板列表");
@@ -25,21 +26,23 @@ export const KanBanScreens = () => {
   const isLoading = kanbanLoading || taskLoading;
 
   return (
-    <ScreenContainer>
-      <h1>{currentProject?.name}看板</h1>
-      <SelectPanel />
-      {isLoading ? (
-        <Spin size={"large"} />
-      ) : (
-        <ColumnsContainer>
-          {kanbans?.map((kanban) => (
-            <KanbanColumn kanban={kanban} key={kanban.id} />
-          ))}
-          <CreateKanban />
-        </ColumnsContainer>
-      )}
-      <TaskModal />
-    </ScreenContainer>
+    <DragDropContext onDragEnd={() => {}}>
+      <ScreenContainer>
+        <h1>{currentProject?.name}看板</h1>
+        <SelectPanel />
+        {isLoading ? (
+          <Spin size={"large"} />
+        ) : (
+          <ColumnsContainer>
+            {kanbans?.map((kanban) => (
+              <KanbanColumn kanban={kanban} key={kanban.id} />
+            ))}
+            <CreateKanban />
+          </ColumnsContainer>
+        )}
+        <TaskModal />
+      </ScreenContainer>
+    </DragDropContext>
   );
 };
 
