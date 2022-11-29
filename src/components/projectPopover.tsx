@@ -6,7 +6,7 @@ import { useProjectModal } from "../screens/project-list/util";
 import { useMemo } from "react";
 
 export const ProjectPopover = () => {
-  const { data: projects } = useProjects();
+  const { data: projects, refetch } = useProjects();
 
   const pinnedProjects = useMemo(
     () => projects?.filter((project) => project.pin),
@@ -25,7 +25,6 @@ export const ProjectPopover = () => {
         ))}
       </List>
       <Divider />
-
       <ButtonNoPadding onClick={open} type={"link"}>
         编辑
       </ButtonNoPadding>
@@ -33,7 +32,11 @@ export const ProjectPopover = () => {
   );
 
   return (
-    <Popover placement={"bottom"} content={content}>
+    <Popover
+      placement={"bottom"}
+      content={content}
+      onOpenChange={() => refetch()}
+    >
       <span>项目</span>
     </Popover>
   );

@@ -1,5 +1,5 @@
-import { Button, Dropdown } from "antd";
 import type { MenuProps } from "antd";
+import { Button, Dropdown } from "antd";
 import { useAuth } from "context/auth-context";
 import { ProjectListScreens } from "screens/project-list";
 import styled from "@emotion/styled";
@@ -7,10 +7,11 @@ import { Row } from "components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
-import { Routes, Route, Navigate, useNavigate } from "react-router";
+import { Navigate, Route, Routes, useNavigate } from "react-router";
 import { ProjectScreens } from "screens/project";
 import { ProjectModal } from "screens/project-list/projectModal";
 import { ProjectPopover } from "components/projectPopover";
+import { UsersPopover } from "./components/usersPopover";
 
 export const AuthenticatedApp = () => {
   return (
@@ -55,7 +56,7 @@ const PageHeader = () => {
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
         </Button>
         <ProjectPopover />
-        <span>用户</span>
+        <UsersPopover />
       </HeaderLeft>
       <HeaderRight>
         <Dropdown menu={{ items }}>

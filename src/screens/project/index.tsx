@@ -19,7 +19,7 @@ export const ProjectScreens = () => {
       key: "kanban",
     },
     {
-      label: <Link to={"epic"}>修改</Link>,
+      label: <Link to={"epic"}>任务组</Link>,
       key: "epic",
     },
   ];

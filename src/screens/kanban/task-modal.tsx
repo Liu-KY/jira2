@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { Button, Form, Input, Modal } from "antd";
 import { UserSelect } from "components/userSelect";
 import { TaskSelect } from "../../components/taskTypeSelect";
+import { EpicSelect } from "../../components/epic-select";
 
 const layout = {
   labelCol: { span: 8 },
@@ -63,6 +64,9 @@ export const TaskModal = () => {
           rules={[{ required: true, message: "请输入任务名" }]}
         >
           <Input />
+        </Form.Item>
+        <Form.Item name={"epicId"} label={"任务组"}>
+          <EpicSelect defaultOptionName={"经办人"} />
         </Form.Item>
         <Form.Item name={"processorId"} label={"经办人"}>
           <UserSelect defaultOptionName={"经办人"} />
