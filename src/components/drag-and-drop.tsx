@@ -14,13 +14,13 @@ export const Drop = ({ children, ...props }: DropProps) => {
   return (
     <Droppable {...props}>
       {(provided) => {
-        if (React.isValidElement(children)) {
-          return React.cloneElement(children, {
-            ...provided.droppableProps,
-            ref: provided.innerRef,
-            provided,
-          });
-        }
+        // if (React.isValidElement(children)) {
+        //   return React.cloneElement(children, {
+        //     ...provided.droppableProps,
+        //     ref: provided.innerRef,
+        //     provided,
+        //   });
+        // }
         return <div />;
       }}
     </Droppable>
@@ -45,13 +45,13 @@ export const Drag = ({ children, ...props }: DragProps) => {
   return (
     <Draggable {...props}>
       {(provided) => {
-        if (React.isValidElement(children)) {
-          return React.cloneElement(children, {
-            ...provided.draggableProps,
-            ...provided.dragHandleProps,
-            ref: provided.innerRef,
-          });
-        }
+        // if (React.isValidElement(children)) {
+        //   return React.cloneElement(children, {
+        //     ...provided.draggableProps,
+        //     ...provided.dragHandleProps,
+        //     ref: provided.innerRef,
+        //   });
+        // }
         return <div />;
       }}
     </Draggable>
