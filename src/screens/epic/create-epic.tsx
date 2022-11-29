@@ -50,7 +50,7 @@ export const CreateEpic = (
                 rules={[{ required: true, message: "请输入任务组名称" }]}
                 name={"name"}
               >
-                <Input placeholder={"请输入用户组名称"} />
+                <Input placeholder={"请输入用户组名称哦"} />
               </Form.Item>
               <Form.Item style={{ textAlign: "right" }}>
                 <Button
